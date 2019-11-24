@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  studocu-cli:
+    container_name: studocu-cli
+    image: studocu:cli
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    command: tail -f /dev/null
+    volumes:
+      - .:/studocu
+    environment:
+      APP_ENV: testing
+    depends_on:
+      - studocu-database
+
+  studocu-database:
+    container_name: studocu-database
+    image: postgres
+    restart: always
+    ports:
+      - 5555:5432
+    environment:
+      POSTGRES_USER: studocu
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: studocu
