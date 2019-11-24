@@ -3,7 +3,7 @@ FROM alpine:3.9 as base
 
 RUN apk update \
 &&  apk add php7-pdo_pgsql php7-mbstring php7-tokenizer php7-xml php7-json  php7-iconv php7-bcmath php7-dom \
-            php7-xmlwriter
+            php7-xmlwriter php7-session
 
 #DEPENDENCIES
 FROM base as studocu
