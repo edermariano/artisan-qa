@@ -1,22 +1,26 @@
 up:
 	docker-compose up -d
 
-stop:
-	docker-compose stop
-
-logs:
-	docker-compose logs -f
-
-dev:
-	docker exec -it studocu-cli sh
-
 studocu:
+	docker exec -it studocu-cli sh -c "php artisan migrate"
 	docker exec -it studocu-cli sh -c "php artisan qanda:interactive"
 
-tests-studocu:
-	docker exec -it studocu-cli sh -c "./vendor/bin/phpunit --testdox"
+up-tests:
+	docker-compose -f docker-compose.test.yaml up -d --remove-orphans
+
+stop:
+	docker-compose  -f docker-compose.test.yaml  -f docker-compose.yaml stop
+
+logs:
+	docker-compose  -f docker-compose.test.yaml  -f docker-compose.yaml logs -f
+
+dev:
+	docker exec -it studocu-cli-test sh
+
+run-tests:
+	docker exec -it studocu-cli-test sh -c "./vendor/bin/phpunit --testdox"
 
 clean:
 	make stop
-	docker rm studocu-cli studocu-database
-	docker image rm studocu:cli
+	docker rm -f studocu-cli studocu-cli-test studocu-database studocu-database-test || true
+	docker image rm studocu:cli || true

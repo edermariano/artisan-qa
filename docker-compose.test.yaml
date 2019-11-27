@@ -1,8 +1,8 @@
 version: '3.7'
 
 services:
-  studocu-cli:
-    container_name: studocu-cli
+  studocu-cli-test:
+    container_name: studocu-cli-test
     image: studocu:cli
     build:
       context: .
@@ -11,16 +11,18 @@ services:
     command: tail -f /dev/null
     volumes:
       - .:/studocu
+    environment:
+      APP_ENV: testing
     depends_on:
-      - studocu-database
+      - studocu-database-test
 
-  studocu-database:
-    container_name: studocu-database
+  studocu-database-test:
+    container_name: studocu-database-test
     image: postgres
     restart: always
     ports:
-      - 5555:5432
+      - 5544:5432
     environment:
-      POSTGRES_DB: studocu
-      POSTGRES_USER: studocu
+      POSTGRES_DB: studocu-test
+      POSTGRES_USER: studocu-test
       POSTGRES_PASSWORD: 123456
