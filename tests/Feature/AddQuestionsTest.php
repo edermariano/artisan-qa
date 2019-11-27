@@ -48,6 +48,7 @@ class AddQuestionsTest extends TestCase
             ->expectsQuestion('Select the action on the below list', '+ Questions and Answers')
             ->assertExitCode(0);
 
+        // Event gets triggered and QACommand will run again
         $this->artisan(QACommand::class)
             ->expectsQuestion('Give the question', $expectedQuestion2)
             ->expectsQuestion("Give the answer for: [$expectedQuestion2]", $expectedAnswer2)
