@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands;
 
-class PracticeCommand extends CommonCommand
-{
-    protected $signature = 'qanda:interactive:practice';
+use Illuminate\Console\Command;
 
+class PracticeCommand extends Command
+{
+    protected $signature = 'qanda:interactive:practice {--prev=: Previous Command}';
     protected $description = 'Practice questions.';
 
     public function handle(): void
