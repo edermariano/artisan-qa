@@ -62,4 +62,32 @@ class AddQuestionsTest extends TestCase
         $this->assertDatabaseHas('questions', ['question' => $expectedQuestion1, 'answer' => $expectedAnswer1]);
         $this->assertDatabaseHas('questions', ['question' => $expectedQuestion2, 'answer' => $expectedAnswer2]);
     }
+
+    public function test_it_should_delete_the_last_question()
+    {
+        // Arrange
+        $expectedQuestion = '2 + 2 / 2';
+        $expectedAnswer = 4;
+
+        // Act - First Question
+        $this->artisan(QACommand::class)
+            ->expectsQuestion('Give the question', $expectedQuestion)
+            ->expectsQuestion("Give the answer for: [$expectedQuestion]", $expectedAnswer)
+            ->expectsOutput($expectedQuestion)
+            ->expectsOutput($expectedAnswer)
+            ->expectsQuestion('Select the action on the below list', 'Go back one step')
+
+            // Second Question - Triggered by Listener
+            ->expectsQuestion("Delete [$expectedQuestion]?", 'yes')
+            ->expectsOutput('Record has been deleted.')
+
+            // Menu Quit
+            ->expectsQuestion('Select the action on the below list', 'Quit')
+            ->expectsQuestion('Quit, are you sure?', 'yes')
+
+            ->assertExitCode(0);
+
+        // Asserts Database
+        $this->assertDatabaseMissing('questions', ['question' => $expectedQuestion, 'answer' => $expectedAnswer]);
+    }
 }
