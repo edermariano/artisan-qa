@@ -1,5 +1,35 @@
 # Q/A app made with Laravel and the Artisan Console
 
+### Requirements:
+ - Docker
+ - docker-compose
+ - Make
+ 
+### Instuctions to run:
+ - download de repository _(git clone...)_
+ - `make up` to up the containers
+ - `make run-tests` to run the automated tests
+ - `make studocu` to run the command
+ - `make reset-progress` to erase the progress
+ - `make clean` to stop and remove docker containers and studocu image
+
+<details>
+<summary>Changelog</summary>
+
+> # Changelog
+> - Dependecies Updates
+> - Laravel 6
+> - PHPUnit 8
+> - Make
+> - Docker + docker-compose
+> - Postgres + sqlite (for tests) 
+> - GitHub Actions each push the CI will run the pipeline:tests 
+> - > source, dependecies installation, tests 
+> 
+</details>
+
+<details>
+<sumary>Requirements</sumary>
 The purpose of the exercise is to see how comfortable you are with a Laravel based interactive console app. We have done a bit of work for you. If you fork this project, run `composer install`, and then run `php artisan qanda:interactive`, the command will be started. In this command, create an event loop and implement the following features:
 
 - The initial interaction should allow you to choose between adding questions and answers and viewing previously entered answers.
@@ -22,4 +52,4 @@ The purpose of the exercise is to see how comfortable you are with a Laravel bas
 ### I really want this job
 - Make a new console command to be run with `php artisan qanda:reset` that removes all previous progresses.
 - Write (a) unit test(s).
-
+</details>
