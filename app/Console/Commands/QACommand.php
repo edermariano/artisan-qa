@@ -33,11 +33,11 @@ class QACommand extends Command implements ActionsCommands
 
     public function actions(): array
     {
-        return ['menu' => 'Menu', 'qa' => '+ Questions and Answers',];
+        return ['menu' => 'Menu', 'qa' => '+ Questions and Answers', 'back' => 'Go back one step'];
     }
 
     public function commands(): array
     {
-        return ['menu' => MenuCommand::class, 'qa' => QACommand::class,];
+        return ['menu' => MenuCommand::class, 'qa' => QACommand::class, 'back' => DeleteLastQuestionCommand::class];
     }
 }
