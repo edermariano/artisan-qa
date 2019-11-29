@@ -1,12 +1,15 @@
 up:
-	docker-compose up -d
+	docker-compose -f docker-compose.test.yaml  -f docker-compose.yaml up -d
+
+up-tests:
+	docker-compose -f docker-compose.test.yaml up -d --remove-orphans
 
 studocu:
 	docker exec -it studocu-cli sh -c "php artisan migrate"
 	docker exec -it studocu-cli sh -c "php artisan qanda:interactive"
 
-up-tests:
-	docker-compose -f docker-compose.test.yaml up -d --remove-orphans
+reset-progress:
+	docker exec -it studocu-cli sh -c "php artisan qanda:reset"
 
 stop:
 	docker-compose  -f docker-compose.test.yaml  -f docker-compose.yaml stop
