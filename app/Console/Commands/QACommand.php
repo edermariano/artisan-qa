@@ -2,12 +2,18 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Concerns\ActionChoices;
+use App\Console\Commands\Concerns\ActionsCommands;
+use App\Console\Commands\Concerns\NextCommand;
+use App\Console\Commands\Concerns\PrevCommandHandle;
 use App\Question;
+use Illuminate\Console\Command;
 
-class QACommand extends CommonCommand
+class QACommand extends Command implements ActionsCommands
 {
-    protected $signature = 'qanda:interactive:qa {--prev=: Previous command}';
+    use NextCommand, ActionChoices, PrevCommandHandle;
 
+    protected $signature = 'qanda:interactive:qa {--prev=: Previous Command}';
     protected $description = 'Create questions and correct answers.';
 
     public function handle(): void
@@ -27,17 +33,11 @@ class QACommand extends CommonCommand
 
     public function actions(): array
     {
-        return [
-            'menu' => 'Menu',
-            'qa' => '+ Questions and Answers',
-        ];
+        return ['menu' => 'Menu', 'qa' => '+ Questions and Answers',];
     }
 
     public function commands(): array
     {
-        return [
-            'menu' => MenuCommand::class,
-            'qa' => QACommand::class,
-        ];
+        return ['menu' => MenuCommand::class, 'qa' => QACommand::class,];
     }
 }
