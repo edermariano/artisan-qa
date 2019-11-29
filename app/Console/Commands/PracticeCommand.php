@@ -10,6 +10,7 @@ use App\Console\Commands\Concerns\PrevCommandHandle;
 use App\Question;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class PracticeCommand extends Command implements ActionsCommands
 {
@@ -94,7 +95,19 @@ class PracticeCommand extends Command implements ActionsCommands
     private function questionsAndAnswers($allQuestions): void
     {
         $questions = $this->progress($allQuestions);
-        $question = $this->choice('Choose the question:', $this->buildQuestions($questions));
+        $buildedQuestions = $this->buildQuestions($questions);
+
+        if (count($buildedQuestions) == 2) {
+            $this->info('You finish all the questions!');
+            $this->overview();
+
+            $action = $this->choices();
+            $this->dispatchEvent($action);
+
+            return;
+        }
+
+        $question = $this->choice('Choose the question:', $buildedQuestions);
 
         if ($question == self::QUIT_QUESTIONS) {
             $action = $this->choices();
@@ -125,5 +138,20 @@ class PracticeCommand extends Command implements ActionsCommands
     public function commands(): array
     {
         return ['menu' => MenuCommand::class, self::DELETE_ANSWER => DeleteLastAnswerCommand::class];
+    }
+
+    private function overview()
+    {
+        $headers = ['Question', 'Your Answer', 'Attempts'];
+
+        $data = Question::query()
+            ->select('question', 'questions.answer', DB::raw('COUNT(answers.id) AS attempts'))
+            ->from('questions')
+            ->join('answers', 'questions.id', '=', 'answers.question_id')
+            ->groupBy('question', 'questions.answer')
+            ->get()
+            ->toArray();
+
+        $this->table($headers, $data);
     }
 }
