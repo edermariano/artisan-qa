@@ -10,7 +10,9 @@ trait NextCommand
 
     protected function fetchNextCommand($action): string
     {
-        $context = array_keys($this->actions() + $this->commonActions, $action)[0];
+        $context = array_keys($this->actions() + $this->commonActions, $action);
+
+        $context = $context[0] ?? $action;
 
         return $this->commands()[$context] ?? 'quit';
     }
