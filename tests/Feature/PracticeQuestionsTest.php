@@ -62,7 +62,8 @@ class PracticeQuestionsTest extends TestCase
         // Act \ Assert
         $this->artisan(PracticeCommand::class)
             ->expectsOutput('Your current progress is 100%')
-            ->expectsQuestion('Choose the question:', PracticeCommand::QUIT_QUESTIONS)
+            ->expectsOutput('You finish all the questions!')
+
             ->expectsQuestion('Select the action on the below list', 'Quit')
             ->expectsQuestion('Quit, are you sure?', 'yes')
             ->assertExitCode(0);
@@ -95,16 +96,66 @@ class PracticeQuestionsTest extends TestCase
         $this->artisan(PracticeCommand::class)
             ->expectsOutput('Your current progress is 50%')
             ->expectsQuestion('Choose the question:', PracticeCommand::DELETE_ANSWER)
-
             ->expectsQuestion("Delete [$answerToBeDeleted->answer]?", 'yes')
             ->expectsOutput('Record has been deleted.')
-
             ->expectsQuestion('Select the action on the below list', 'Quit')
             ->expectsQuestion('Quit, are you sure?', 'yes')
-
             ->assertExitCode(0);
 
         $this->assertDatabaseHas('answers', ['id' => $firstAnswer->id]);
         $this->assertDatabaseMissing('answers', ['id' => $answerToBeDeleted->id]);
+    }
+
+    public function test_it_should_show_the_progress_after_the_answer()
+    {
+        // Arrange
+        $question1 = factory(Question::class)->create();
+        $question2 = factory(Question::class)->create();
+        $question3 = factory(Question::class)->create();
+        $question4 = factory(Question::class)->create();
+
+        // Act \ Assert
+        $this->artisan(PracticeCommand::class)
+            ->expectsOutput('Your current progress is 0%')
+            ->expectsQuestion('Choose the question:', $question1->question)
+            ->expectsQuestion("Answer:", $question1->answer)
+            ->expectsOutput('Correct Answer!')
+
+            ->expectsOutput('Your current progress is 25%')
+            ->expectsQuestion('Choose the question:', $question2->question)
+            ->expectsQuestion("Answer:", 'incorrect answer')
+            ->expectsOutput('Incorrect!')
+
+            ->expectsOutput('Your current progress is 25%')
+            ->expectsQuestion('Choose the question:', PracticeCommand::QUIT_QUESTIONS)
+            ->expectsQuestion('Select the action on the below list', 'Quit')
+            ->expectsQuestion('Quit, are you sure?', 'yes')
+            ->assertExitCode(0);
+    }
+
+    public function test_it_should_show_the_overview_if_all_questions_get_answered()
+    {
+        // Arrange
+        $question1 = factory(Question::class)->create();
+        $question2 = factory(Question::class)->create();
+
+        // Act \ Assert
+        $this->artisan(PracticeCommand::class)
+            ->expectsOutput('Your current progress is 0%')
+            ->expectsQuestion('Choose the question:', $question1->question)
+            ->expectsQuestion("Answer:", $question1->answer)
+            ->expectsOutput('Correct Answer!')
+
+            ->expectsOutput('Your current progress is 50%')
+            ->expectsQuestion('Choose the question:', $question2->question)
+            ->expectsQuestion("Answer:", $question2->answer)
+            ->expectsOutput('Correct Answer!')
+
+            ->expectsOutput('Your current progress is 100%')
+            ->expectsOutput('You finish all the questions!')
+
+            ->expectsQuestion('Select the action on the below list', 'Quit')
+            ->expectsQuestion('Quit, are you sure?', 'yes')
+            ->assertExitCode(0);
     }
 }
