@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Answer;
+use App\Console\Commands\DeleteLastAnswerCommand;
 use App\Console\Commands\PracticeCommand;
 use App\Question;
 use Tests\TestCase;
@@ -63,7 +64,6 @@ class PracticeQuestionsTest extends TestCase
         $this->artisan(PracticeCommand::class)
             ->expectsOutput('Your current progress is 100%')
             ->expectsOutput('You finish all the questions!')
-
             ->expectsQuestion('Select the action on the below list', 'Quit')
             ->expectsQuestion('Quit, are you sure?', 'yes')
             ->assertExitCode(0);
@@ -106,6 +106,17 @@ class PracticeQuestionsTest extends TestCase
         $this->assertDatabaseMissing('answers', ['id' => $answerToBeDeleted->id]);
     }
 
+    public function test_it_should_show_a_message_if_there_is_no_answer_to_delete()
+    {
+        // Arrange
+        // Act \ Assert
+        $this->artisan(DeleteLastAnswerCommand::class)
+            ->expectsOutput('There is no answer to delete.')
+            ->expectsQuestion('Select the action on the below list', 'Quit')
+            ->expectsQuestion('Quit, are you sure?', 'yes')
+            ->assertExitCode(0);
+    }
+
     public function test_it_should_show_the_progress_after_the_answer()
     {
         // Arrange
@@ -120,12 +131,10 @@ class PracticeQuestionsTest extends TestCase
             ->expectsQuestion('Choose the question:', $question1->question)
             ->expectsQuestion("Answer:", $question1->answer)
             ->expectsOutput('Correct Answer!')
-
             ->expectsOutput('Your current progress is 25%')
             ->expectsQuestion('Choose the question:', $question2->question)
             ->expectsQuestion("Answer:", 'incorrect answer')
             ->expectsOutput('Incorrect!')
-
             ->expectsOutput('Your current progress is 25%')
             ->expectsQuestion('Choose the question:', PracticeCommand::QUIT_QUESTIONS)
             ->expectsQuestion('Select the action on the below list', 'Quit')
@@ -145,15 +154,12 @@ class PracticeQuestionsTest extends TestCase
             ->expectsQuestion('Choose the question:', $question1->question)
             ->expectsQuestion("Answer:", $question1->answer)
             ->expectsOutput('Correct Answer!')
-
             ->expectsOutput('Your current progress is 50%')
             ->expectsQuestion('Choose the question:', $question2->question)
             ->expectsQuestion("Answer:", $question2->answer)
             ->expectsOutput('Correct Answer!')
-
             ->expectsOutput('Your current progress is 100%')
             ->expectsOutput('You finish all the questions!')
-
             ->expectsQuestion('Select the action on the below list', 'Quit')
             ->expectsQuestion('Quit, are you sure?', 'yes')
             ->assertExitCode(0);
