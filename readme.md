@@ -1,5 +1,8 @@
 # Q/A app made with Laravel and the Artisan Console
 
+![](https://github.com/edermariano/artisan-qa/workflows/StuDocu%20Tests/badge.svg?branch=master)
+[Builds](https://github.com/edermariano/artisan-qa/actions)
+
 ### Requirements:
  - Docker
  - docker-compose
@@ -17,10 +20,11 @@
 <details>
 <summary>Changelog</summary>
 
-> # Changelog
+### Changelog
 > - Dependecies Updates
 > - Laravel 6
 > - PHPUnit 8
+> - pcov (test code coverage)
 > - Make
 > - Docker + docker-compose
 > - Postgres + sqlite (for tests) 
@@ -30,7 +34,7 @@
 </details>
 
 <details>
-<sumary>Requirements</sumary>
+<summary>Requirements</summary>
 The purpose of the exercise is to see how comfortable you are with a Laravel based interactive console app. We have done a bit of work for you. If you fork this project, run `composer install`, and then run `php artisan qanda:interactive`, the command will be started. In this command, create an event loop and implement the following features:
 
 - The initial interaction should allow you to choose between adding questions and answers and viewing previously entered answers.
