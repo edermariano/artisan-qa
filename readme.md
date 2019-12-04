@@ -7,6 +7,7 @@
  
 ### Instuctions to run:
  - download de repository _(git clone...)_
+ - create your `.env` file based on `.env.example`
  - `make up` to up the containers
  - `make run-tests` to run the automated tests
  - `make studocu` to run the command

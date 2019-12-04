@@ -31,6 +31,7 @@ logs:
 
 up:
 	docker-compose up -d --remove-orphans
+	docker exec -it studocu-cli sh -c "composer install"
 
 up-tests:
 	docker-compose -f docker-compose.test.yaml up -d --remove-orphans

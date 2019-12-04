@@ -18,4 +18,4 @@ RUN apk add composer php7-curl php7-zip \
 #CLI
 FROM studocu as dev
 RUN apk add php7-pecl-pcov --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-    && composer install
+&& composer install
